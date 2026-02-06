@@ -4,9 +4,14 @@
 **Problem Statement ID:** 1
 
 ## Tech Stack
+<<<<<<< HEAD
 
 ### Programming Languages
 *   **JavaScript (Node.js)**
+=======
+** nodejs,express,ejs,mongoose
+ 
+>>>>>>> 643ad3c32c2d0e5a458305c678725ada90dcffe2
 
 ### Libraries & Frameworks
 Based on the project dependencies, the following libraries are utilized:
@@ -16,13 +21,28 @@ Based on the project dependencies, the following libraries are utilized:
 *   **Readable-stream:** Streams implementation for handling data flow.
 *   **Braces:** Fast and safe brace expansion.
 *   **Punycode:** Character encoding converter.
+<<<<<<< HEAD
+=======
+*   **dotenv**
+*   **express**
+*   **jsonwebtoken*
+*   **axios**
+*   **multer**
+*   **nodemon**
+*   **pdf-parser**
+>>>>>>> 643ad3c32c2d0e5a458305c678725ada90dcffe2
 
 ## Feature List
 
 *   **Secure Authentication:** Implements password hashing using Bcrypt.
 *   **Database Integration:** Connects to MongoDB for data persistence.
 *   **Asynchronous Processing:** Utilizes async utilities for non-blocking operations.
+<<<<<<< HEAD
 *   *(Add specific project features here, e.g., "Real-time data tracking", "User Dashboard")*
+=======
+*   **user screening using ai based chat bot**
+*   ** complete voice based conversion**
+>>>>>>> 643ad3c32c2d0e5a458305c678725ada90dcffe2
 
 ## Setup Instructions
 
