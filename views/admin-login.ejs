@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Bot - Login</title>
+    <link rel="stylesheet" href="/stylesheet/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h2>Onstro talentAI</h2>
+            <p class="subtitle">Welcome to onstro TalentAI</p>
+            
+            <div class="tab-container">
+                 
+                <button id="adminTab" class="tab">Recruiter</button>
+            </div>
+
+            <form id="loginForm" action="/admin-login" method="post">
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" name="email" id="email" placeholder="name@company.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" id="submitBtn" class="login-btn">Login</button>
+                <a href="/admin-create">don't have account? create account</a>
+                 
+            </form>
+            
+            <div class="footer-info">
+                <span>MES Pro Programmer</span>
+            </div>
+        </div>
+    </div>
+    <script src="/javascript/login.js"></script>
+</body>
+</html>

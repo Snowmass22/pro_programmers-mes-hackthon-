@@ -1,0 +1,141 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: #0f172a; /* Dark sleek background */
+    color: white;
+    overflow-x: hidden;
+    margin-right: 10rem;   
+    margin-left: 10rem;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 80px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.logo span {
+    color: #6366f1;
+}
+
+.nav-links a {
+    color: #cbd5e1;
+    text-decoration: none;
+    margin-right: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 80px 80px;
+    min-height: 80vh;
+}
+
+.hero-content {
+    max-width: 600px;
+}
+
+h1 {
+    font-size: 4rem;
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+.highlight {
+    color: #6366f1;
+}
+
+p {
+    font-size: 1.2rem;
+    color: #94a3b8;
+    margin-bottom: 30px;
+}
+
+/* Buttons */
+.btn-primary, .btn-primary-large {
+    background: #6366f1;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-primary-large {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    margin-right: 15px;
+}
+
+.btn-secondary-large {
+    background: transparent;
+    color: white;
+    border: 2px solid #334155;
+    padding: 15px 40px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Voice Animation */
+.voice-wave {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.voice-wave span {
+    display: block;
+    width: 15px;
+    height: 80px;
+    background: #6366f1;
+    border-radius: 10px;
+    animation: wave 1.2s infinite ease-in-out;
+}
+
+.voice-wave span:nth-child(2) { animation-delay: 0.2s; height: 120px; }
+.voice-wave span:nth-child(3) { animation-delay: 0.4s; height: 150px; }
+.voice-wave span:nth-child(4) { animation-delay: 0.2s; height: 120px; }
+
+@keyframes wave {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1); }
+}
+
+/* Features */
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 60px 80px;
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #1e293b;
+}
+
+footer {
+    text-align: center;
+    padding: 40px;
+    color: #475569;
+}

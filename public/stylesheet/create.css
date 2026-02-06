@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    /* Deep Slate/Navy background */
+    background: #0f172a; 
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.signup-card {
+    /* Slightly lighter than body for a raised card effect */
+    background: #1e293b; 
+    padding: 40px;
+    border-radius: 12px;
+    /* Deeper, more subtle shadows for dark mode */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 450px;
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Subtle border for definition */
+}
+
+h2 {
+    color: #f8fafc; /* Crisp Off-white */
+    font-size: 28px;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.subtitle {
+    color: #94a3b8; /* Muted Blue-Gray */
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #cbd5e1; /* Light Slate for readability */
+    margin-bottom: 6px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    /* Darker input background than the card */
+    background: #0f172a; 
+    border: 1px solid #334155; 
+    border-radius: 8px;
+    font-size: 15px;
+    color: #f1f5f9; /* Text color inside input */
+    transition: all 0.2s;
+}
+
+input::placeholder {
+    color: #475569;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #818cf8; /* Lighter Indigo for better contrast */
+    background: #1e293b; /* Feedback on focus */
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+}
+
+/* Fix for Select dropdown background in some browsers */
+select option {
+    background: #1e293b;
+    color: #f1f5f9;
+}
+
+.signup-btn {
+    width: 100%;
+    padding: 14px;
+    background: #6366f1; /* Primary Onstro Indigo */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.signup-btn:hover {
+    background: #4f46e5;
+    transform: translateY(-1px); /* Adds a subtle lift on hover */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+}
+
+.login-link {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+.login-link a {
+    color: #818cf8; /* Light Indigo */
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.login-link a:hover {
+    color: #a5b4fc; /* High contrast hover state */
+    text-decoration: underline;
+}

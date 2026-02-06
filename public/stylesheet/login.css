@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    /* Deep background color */
+    background: #0f172a; 
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Card Styling */
+.login-card {
+    /* Slightly lighter than body to create depth */
+    background: #1e293b; 
+    padding: 40px;
+    border-radius: 16px;
+    /* Darker shadow for a subtle lift effect */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Soft border for definition */
+}
+
+h2 {
+    color: #f8fafc; /* Crisp white */
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #94a3b8; /* Muted slate gray */
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* Tab Switcher */
+.tab-container {
+    display: flex;
+    background: #0f172a; /* Match body for "inset" look */
+    padding: 4px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.tab {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: #64748b; /* Desaturated text */
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    background: #334155; /* Active tab stands out */
+    color: #818cf8; /* Lighter indigo for better contrast in dark mode */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Inputs */
+.input-group {
+    text-align: left;
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #cbd5e1; /* Light gray label */
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    background: #334155; /* Darker input background */
+    border: 1px solid #475569; /* Subtle border */
+    border-radius: 8px;
+    font-size: 15px;
+    color: #f8fafc; /* White text for typing */
+    transition: all 0.2s;
+}
+
+input::placeholder {
+    color: #94a3b8;
+}
+
+input:focus {
+    outline: none;
+    border-color: #6366f1;
+    background: #1e293b; /* Slightly change color on focus */
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Button */
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    background: #6366f1; /* Vibrant indigo */
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+}
+
+.login-btn:hover {
+    background: #4f46e5;
+    transform: translateY(-1px); /* Little interaction feedback */
+}
+
+.footer-info {
+    margin-top: 25px;
+    font-size: 12px;
+    color: #64748b;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 20px;
+}

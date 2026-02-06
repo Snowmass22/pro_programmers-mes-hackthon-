@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Interview Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    .gradient-border {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef);
+      padding: 1px;
+      border-radius: 16px;
+    }
+    
+    .gradient-border-inner {
+      background: #0f0f1a;
+      border-radius: 15px;
+    }
+    
+    .stat-card {
+      background: linear-gradient(145deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(139, 92, 246, 0.2);
+    }
+    
+    .user-card {
+      background: linear-gradient(145deg, #1a1a2e, #16162a);
+      border: 1px solid rgba(139, 92, 246, 0.15);
+      transition: all 0.3s ease;
+    }
+    
+    .user-card:hover {
+      border-color: rgba(139, 92, 246, 0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+    }
+    
+    .score-ring {
+      background: conic-gradient(from 0deg, #6366f1, #8b5cf6, #d946ef, #6366f1);
+      animation: rotate 8s linear infinite;
+    }
+    
+    @keyframes rotate {
+      100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-in {
+      animation: fadeInUp 0.5s ease forwards;
+    }
+    
+    .progress-bar {
+      background: linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef);
+    }
+    
+    .glow {
+      box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+    }
+    
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #0a0a14;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #6366f1, #8b5cf6);
+      border-radius: 4px;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-[#0a0a14] text-gray-100 overflow-auto">
+  <div id="app" class="min-h-full w-full"><!-- Background Effects -->
+   <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-violet-600/5 rounded-full blur-3xl"></div>
+   </div><!-- Main Content -->
+   <div class="relative z-10 p-6 lg:p-8 max-w-7xl mx-auto"><!-- Header -->
+    <header class="mb-10 animate-in" style="animation-delay: 0.1s;">
+     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div>
+       <div class="flex items-center gap-3 mb-2">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
+         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+         </svg>
+        </div><span class="text-xs font-medium px-3 py-1 rounded-full bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-purple-500/30 text-purple-300">Admin Panel</span>
+         <a href="/logout"><div>
+         
+        </div><span class="text-xs font-medium px-3 py-1 rounded-full bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-purple-500/30 text-purple-300">logout</span></a>
+       </div>
+       <h1 id="dashboard-title" class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent">AI Interview Dashboard</h1>
+       <p id="subtitle-text" class="text-gray-400 mt-2">Monitor candidate performance and interview analytics</p>
+      </div><!-- Search & Filter -->
+      <div class="flex flex-col sm:flex-row gap-3">
+       <div class="relative">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg><input type="text" id="search-input" placeholder="Search candidates..." class="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-[#1a1a2e] border border-purple-500/20 rounded-xl text-gray-200 placeholder-gray-500 focus:outline-none focus:border-purple-500/50 transition-colors">
+       </div><select id="filter-select" class="px-4 py-2.5 bg-[#1a1a2e] border border-purple-500/20 rounded-xl text-gray-200 focus:outline-none focus:border-purple-500/50 cursor-pointer"> <option value="all">All Status</option> <option value="completed">Completed</option> <option value="in-progress">In Progress</option> <option value="pending">Pending</option> </select>
+      </div>
+     </div>
+    </header><!-- Stats Overview -->
+    <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10 animate-in" style="animation-delay: 0.2s;">
+     <div class="stat-card rounded-2xl p-5 backdrop-blur-sm">
+      <div class="flex items-center justify-between mb-3">
+       <div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center">
+        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+       </div><span class="text-xs text-emerald-400 font-medium">+12%</span>
+      </div>
+      <p class="text-2xl font-bold text-white mono">5</p>
+      <p class="text-sm text-gray-400">Total Candidates</p>
+     </div>
+     <div class="stat-card rounded-2xl p-5 backdrop-blur-sm">
+      <div class="flex items-center justify-between mb-3">
+       <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div><span class="text-xs text-emerald-400 font-medium">+8%</span>
+      </div>
+      <p class="text-2xl font-bold text-white mono">3</p>
+      <p class="text-sm text-gray-400">Completed</p>
+     </div>
+     <div class="stat-card rounded-2xl p-5 backdrop-blur-sm">
+      <div class="flex items-center justify-between mb-3">
+       <div class="w-10 h-10 rounded-xl bg-pink-500/20 flex items-center justify-center">
+        <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+       </div><span class="text-xs text-emerald-400 font-medium">+5%</span>
+      </div>
+      <p class="text-2xl font-bold text-white mono">49.3</p>
+      <p class="text-sm text-gray-400">Avg. Score</p>
+     </div>
+     <div class="stat-card rounded-2xl p-5 backdrop-blur-sm">
+      <div class="flex items-center justify-between mb-3">
+       <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center">
+        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div><span class="text-xs text-amber-400 font-medium">Active</span>
+      </div>
+      <p class="text-2xl font-bold text-white mono">1</p>
+      <p class="text-sm text-gray-400">In Progress</p>
+     </div>
+    </section><!-- Users Table -->
+    <section class="animate-in" style="animation-delay: 0.3s;">
+     <div class="gradient-border mb-6">
+      <div class="gradient-border-inner p-6">
+       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <h2 class="text-xl font-semibold text-white">Candidate Overview</h2>
+        
+       </div><!-- Table -->
+       <div class="overflow-x-auto">
+        <table class="w-full" id="users-table">
+         <thead>
+          <tr class="border-b border-purple-500/20">
+           <th class="text-left py-4 px-4 text-sm font-medium text-gray-400">Candidate</th>
+           <th class="text-left py-4 px-4 text-sm font-medium text-gray-400">Role Applied</th>
+           <th class="text-center py-4 px-4 text-sm font-medium text-gray-400">Score</th>
+            
+           <th class="text-center py-4 px-4 text-sm font-medium text-gray-400">Status</th>
+ 
+          </tr>
+         </thead>
+         <tbody id="table-body"><!-- Users will be rendered here -->
+         </tbody>
+        </table>
+       </div>
+      </div>
+     </div>
+    </section><!-- User Detail Cards -->
+    <section class="animate-in" style="animation-delay: 0.4s;">
+     <h2 class="text-xl font-semibold text-white mb-6">Top Performers</h2>
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="top-performers"><!-- Cards will be rendered here -->
+     </div>
+    </section>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      dashboard_title: "AI Interview Dashboard",
+      subtitle_text: "Monitor candidate performance and interview analytics",
+      primary_color: "#8b5cf6",
+      secondary_color: "#1a1a2e",
+      text_color: "#f3f4f6",
+      accent_color: "#6366f1",
+      background_color: "#0a0a14"
+    };
+
+    let config = { ...defaultConfig };
+
+    const users = <%- JSON.stringify(users) %>;
+
+    function getScoreColor(score) {
+      if (score >= 90) return "text-emerald-400";
+      if (score >= 75) return "text-amber-400";
+      if (score >= 60) return "text-orange-400";
+      return "text-red-400";
+    }
+
+    function getScoreGradient(score) {
+      if (score >= 90) return "from-emerald-500 to-teal-500";
+      if (score >= 75) return "from-amber-500 to-yellow-500";
+      if (score >= 60) return "from-orange-500 to-red-500";
+      return "from-red-500 to-pink-500";
+    }
+
+    function getStatusBadge(status) {
+      const styles = {
+        completed: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+        "in-progress": "bg-amber-500/20 text-amber-400 border-amber-500/30",
+        pending: "bg-gray-500/20 text-gray-400 border-gray-500/30"
+      };
+      const labels = {
+        completed: "Completed",
+        "in-progress": "In Progress",
+        pending: "Pending"
+      };
+      return `<span class="px-3 py-1 text-xs font-medium rounded-full border ${styles[status]}">${labels[status]}</span>`;
+    }
+
+    function renderTable(filteredUsers) {
+      const tbody = document.getElementById("table-body");
+      tbody.innerHTML = filteredUsers.map((user, index) => `
+        <tr class="border-b border-purple-500/10 hover:bg-purple-500/5 transition-colors" style="animation: fadeInUp 0.3s ease forwards; animation-delay: ${index * 0.05}s; opacity: 0;">
+          <td class="py-4 px-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-semibold text-sm">
+                ${user.avatar}
+              </div>
+              <div>
+                <p class="font-medium text-white">${user.name}</p>
+                <p class="text-sm text-gray-500">${user.email}</p>
+              </div>
+            </div>
+          </td>
+          <td class="py-4 px-4">
+            <span class="text-gray-300">${user.role}</span>
+          </td>
+          <td class="py-4 px-4 text-center">
+            <span class="mono text-lg font-bold ${getScoreColor(user.score)}">${user.score > 0 ? user.score : '—'}</span>
+          </td>
+          <td class="py-4 px-4">
+            <div class="flex gap-4 text-xs">
+              
+              
+            </div>
+          </td>
+          <td class="py-4 px-4 text-center">
+            ${getStatusBadge(user.status)}
+          </td>
+          <td class="py-4 px-4 text-center">
+            <div class="flex items-center justify-center gap-2">
+              <button class="p-2 rounded-lg hover:bg-purple-500/20 transition-colors group" title="View Details">
+                <svg class="w-4 h-4 text-gray-400 group-hover:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </button>
+              <button class="p-2 rounded-lg hover:bg-purple-500/20 transition-colors group" title="Download Report">
+                <svg class="w-4 h-4 text-gray-400 group-hover:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+              </button>
+              <button class="p-2 rounded-lg hover:bg-purple-500/20 transition-colors group" title="Send Feedback">
+                <svg class="w-4 h-4 text-gray-400 group-hover:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderTopPerformers() {
+      const container = document.getElementById("top-performers");
+      const topUsers = users.filter(u => u.status === "completed").sort((a, b) => b.score - a.score).slice(0, 3);
+      
+      container.innerHTML = topUsers.map((user, index) => `
+        <div class="user-card rounded-2xl p-6" style="animation-delay: ${0.5 + index * 0.1}s;">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="relative">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg">
+                  ${user.avatar}
+                </div>
+                <div class="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-r ${getScoreGradient(user.score)} flex items-center justify-center">
+                  <span class="text-xs font-bold text-white">${index + 1}</span>
+                </div>
+              </div>
+              <div>
+                <h3 class="font-semibold text-white">${user.name}</h3>
+                <p class="text-sm text-gray-400">${user.role}</p>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="score-ring w-16 h-16 rounded-full p-0.5">
+                <div class="w-full h-full rounded-full bg-[#0f0f1a] flex items-center justify-center">
+                  <span class="mono text-xl font-bold ${getScoreColor(user.score)}">${user.score}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+         
+            
+           
+            
+           
+          
+          <div class="flex items-center justify-between mt-5 pt-4 border-t border-purple-500/10">
+            <div class="flex gap-4 text-xs text-gray-500">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                ${user.questions} Questions
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                ${user.duration}
+              </span>
+            </div>
+            <button class="text-sm font-medium text-purple-400 hover:text-purple-300 transition-colors">
+              View Report →
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterUsers() {
+      const searchTerm = document.getElementById("search-input").value.toLowerCase();
+      const statusFilter = document.getElementById("filter-select").value;
+      
+      let filtered = users;
+      
+      if (searchTerm) {
+        filtered = filtered.filter(u => 
+          u.name.toLowerCase().includes(searchTerm) || 
+          u.email.toLowerCase().includes(searchTerm) ||
+          u.role.toLowerCase().includes(searchTerm)
+        );
+      }
+      
+      if (statusFilter !== "all") {
+        filtered = filtered.filter(u => u.status === statusFilter);
+      }
+      
+      renderTable(filtered);
+    }
+
+    // Event listeners
+    document.getElementById("search-input").addEventListener("input", filterUsers);
+    document.getElementById("filter-select").addEventListener("change", filterUsers);
+
+    // Initial render
+    renderTable(users);
+    renderTopPerformers();
+
+    // Element SDK initialization
+    async function onConfigChange(newConfig) {
+      const title = document.getElementById("dashboard-title");
+      const subtitle = document.getElementById("subtitle-text");
+      
+      if (title) title.textContent = newConfig.dashboard_title || defaultConfig.dashboard_title;
+      if (subtitle) subtitle.textContent = newConfig.subtitle_text || defaultConfig.subtitle_text;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (cfg) => ({
+          recolorables: [
+            {
+              get: () => cfg.background_color || defaultConfig.background_color,
+              set: (value) => {
+                cfg.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => cfg.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                cfg.secondary_color = value;
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            },
+            {
+              get: () => cfg.text_color || defaultConfig.text_color,
+              set: (value) => {
+                cfg.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => cfg.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                cfg.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => cfg.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                cfg.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (cfg) => new Map([
+          ["dashboard_title", cfg.dashboard_title || defaultConfig.dashboard_title],
+          ["subtitle_text", cfg.subtitle_text || defaultConfig.subtitle_text]
+        ])
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c9558e1c19df424',t:'MTc3MDMyNTMzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

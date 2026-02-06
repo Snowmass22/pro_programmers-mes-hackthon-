@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    * {
+      font-family: 'DM Sans', sans-serif;
+    }
+    .fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+    .job-row:hover {
+      background: rgba(71, 85, 105, 0.3);
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full bg-slate-950 text-slate-100">
+  <div id="app-wrapper" class="h-full w-full overflow-auto">
+   <div class="min-h-full p-6 md:p-8"><!-- Header -->
+    <header class="mb-8">
+     <div class="flex items-center justify-between flex-wrap gap-4">
+      <div>
+       <h1 id="dashboard-title" class="text-2xl md:text-3xl font-bold text-white">Welcome <%= user.name %>!</h1>
+       <p id="welcome-message" class="text-slate-400 mt-1">Manage job postings and track recruitment stats</p>
+      </div><button id="add-job-btn" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow-md">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+       </svg> Add Job </button>
+       <a href="/admin-view-users">
+       <button id="add-job-btn" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow-md">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+       </svg> view users</a> </button></a>
+       <a href="/admin-logout">
+       <button id="add-job-btn" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow-md">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+       </svg>  logout</a> </button></a>
+     </div>
+    </header><!-- Stats Section -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+     <div class="stat-card bg-slate-900 rounded-2xl p-5 border border-slate-800 transition-all duration-300">
+      <div class="flex items-center gap-3 mb-3">
+       <div class="w-10 h-10 bg-indigo-900/50 rounded-xl flex items-center justify-center">
+        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+       </div>
+      </div>
+      <p id="total-jobs" class="text-2xl font-bold text-white">0</p>
+      <p class="text-sm text-slate-400">Total Jobs</p>
+     </div>
+     <div class="stat-card bg-slate-900 rounded-2xl p-5 border border-slate-800 transition-all duration-300">
+      <div class="flex items-center gap-3 mb-3">
+       <div class="w-10 h-10 bg-emerald-900/50 rounded-xl flex items-center justify-center">
+        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div>
+      </div>
+      <p id="active-jobs" class="text-2xl font-bold text-white">0</p>
+      <p class="text-sm text-slate-400">Active</p>
+     </div>
+     <div class="stat-card bg-slate-900 rounded-2xl p-5 border border-slate-800 transition-all duration-300">
+      <div class="flex items-center gap-3 mb-3">
+       <div class="w-10 h-10 bg-amber-900/50 rounded-xl flex items-center justify-center">
+        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div>
+      </div>
+      <p id="draft-jobs" class="text-2xl font-bold text-white">0</p>
+      <p class="text-sm text-slate-400">Drafts</p>
+     </div>
+     <div class="stat-card bg-slate-900 rounded-2xl p-5 border border-slate-800 transition-all duration-300">
+      <div class="flex items-center gap-3 mb-3">
+       <div class="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center">
+        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+        </svg>
+       </div>
+      </div>
+      <p id="closed-jobs" class="text-2xl font-bold text-white">0</p>
+      <p class="text-sm text-slate-400">Closed</p>
+     </div>
+    </section><!-- Jobs Table -->
+    <section class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
+     <div class="p-5 border-b border-slate-800">
+      <h2 class="text-lg font-semibold text-white">Job Postings</h2>
+     </div>
+     <div id="jobs-container" class="divide-y divide-slate-800">
+      <div id="empty-state" class="p-12 text-center">
+       <div class="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+       </div>
+       <p class="text-slate-400 mb-2">No job postings yet</p>
+       <p class="text-sm text-slate-500">Click "Add Job" to create your first posting</p>
+      </div>
+     </div>
+    </section><!-- Add/Edit Job Modal -->
+    <div id="job-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+     <div class="bg-slate-900 rounded-2xl w-full max-w-2xl max-h-[90%] overflow-auto shadow-2xl fade-in border border-slate-800">
+      <div class="p-6 border-b border-slate-800 flex items-center justify-between sticky top-0 bg-slate-900 rounded-t-2xl">
+       <h3 id="modal-title" class="text-xl font-semibold text-white">Add New Job</h3><button id="close-modal" class="w-10 h-10 rounded-xl hover:bg-slate-800 flex items-center justify-center transition-colors">
+        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+      </div>
+      <form id="job-form" action="/admin-dashboard" method="post" class="p-6 space-y-5">
+        <input type="hidden" id="job-id" value="">
+       <div class="grid md:grid-cols-2 gap-5">
+        <div><label for="job-title"  class="block text-sm font-medium text-slate-200 mb-2">Job Title *</label> <input type="text"  name="jobtitle" id="job-title" required class="w-full px-4 py-3 border border-slate-700 bg-slate-800 text-white rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-500" placeholder="e.g. Senior Software Engineer">
+        </div>
+        <div><label for="job-department"  class="block text-sm font-medium text-slate-200 mb-2">Department *</label> <input type="text" name="department" id="job-department" required class="w-full px-4 py-3 border border-slate-700 bg-slate-800 text-white rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-500" placeholder="e.g. Engineering">
+        </div>
+       </div>
+       <div class="grid md:grid-cols-2 gap-5">
+        <div><label for="job-location" class="block text-sm font-medium text-slate-200 mb-2">Location *</label> <input type="text" name="location" id="job-location" required class="w-full px-4 py-3 border border-slate-700 bg-slate-800 text-white rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-500" placeholder="e.g. Remote, New York">
+        </div>
+        <!-- <div><label for="job-type" class="block text-sm font-medium text-slate-200 mb-2">Job Type *</label> <select id="job-type" required class="w-full px-4 py-3 border border-slate-700 bg-slate-800 text-white rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"> <option value="">Select type</option> <option value="Full-time">Full-time</option> <option value="Part-time">Part-time</option> <option value="Contract">Contract</option> <option value="Internship">Internship</option> </select>
+        </div> -->
+       </div>
+       <div><label for="job-salary" class="block text-sm font-medium text-slate-200 mb-2">Salary Range</label> <input type="text" name="salary" id="job-salary" class="w-full px-4 py-3 border border-slate-700 bg-slate-800 text-white rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-500" placeholder="e.g. $80,000 - $120,000">
+       </div>
+       <div><label for="job-description" class="block text-sm font-medium text-slate-200 mb-2">Job Description *</label> <textarea id="job-description" name="description" required rows="4" class="w-full px-4 py-3 border border-slate-700 bg-slate-800 text-white rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all resize-none placeholder:text-slate-500" placeholder="Describe the role, responsibilities, and what makes this opportunity exciting..."></textarea>
+       </div>
+       <div><label for="job-requirements" class="block text-sm font-medium text-slate-200 mb-2">Requirements</label> <textarea id="job-requirements" name="requirement" rows="3" class="w-full px-4 py-3 border border-slate-700 bg-slate-800 text-white rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all resize-none placeholder:text-slate-500" placeholder="List the skills, experience, and qualifications required..."></textarea>
+       </div>
+      <!--  <div><label for="job-status" class="block text-sm font-medium text-slate-200 mb-2">Status *</label> <select id="job-status" required class="w-full px-4 py-3 border border-slate-700 bg-slate-800 text-white rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"> <option value="Draft">Draft</option> <option value="Active">Active</option> <option value="Closed">Closed</option> </select>
+       </div> -->
+       <div class="flex gap-3 pt-4"><button type="button" id="cancel-btn" class="flex-1 px-5 py-3 border border-slate-700 text-slate-300 rounded-xl font-medium hover:bg-slate-800 transition-colors"> Cancel </button> <button type="submit" id="submit-btn" class="flex-1 px-5 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"> Save Job </button>
+       </div>
+      </form>
+     </div>
+    </div><!-- Delete Confirmation -->
+    <div id="delete-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+     <div class="bg-slate-900 rounded-2xl w-full max-w-md p-6 shadow-2xl fade-in border border-slate-800">
+      <div class="w-12 h-12 bg-red-900/50 rounded-xl flex items-center justify-center mx-auto mb-4">
+       <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+       </svg>
+      </div>
+      <h3 class="text-xl font-semibold text-white text-center mb-2">Delete Job?</h3>
+      <p class="text-slate-400 text-center mb-6">This action cannot be undone. The job posting will be permanently removed.</p>
+      <div class="flex gap-3"><button id="cancel-delete" class="flex-1 px-5 py-3 border border-slate-700 text-slate-300 rounded-xl font-medium hover:bg-slate-800 transition-colors"> Cancel </button> <button id="confirm-delete" class="flex-1 px-5 py-3 bg-red-600 text-white rounded-xl font-medium hover:bg-red-700 transition-colors"> Delete </button>
+      </div>
+     </div>
+    </div><!-- Limit Warning -->
+    <div id="limit-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+     <div class="bg-slate-900 rounded-2xl w-full max-w-md p-6 shadow-2xl fade-in border border-slate-800">
+      <div class="w-12 h-12 bg-amber-900/50 rounded-xl flex items-center justify-center mx-auto mb-4">
+       <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+       </svg>
+      </div>
+      <h3 class="text-xl font-semibold text-white text-center mb-2">Limit Reached</h3>
+      <p class="text-slate-400 text-center mb-6">You've reached the maximum of 999 job postings. Please delete some jobs to add new ones.</p><button id="close-limit" class="w-full px-5 py-3 bg-slate-800 text-white rounded-xl font-medium hover:bg-slate-700 transition-colors"> Got it </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      dashboard_title: 'Job Admin Dashboard',
+      welcome_message: 'Manage job postings and track recruitment stats',
+      background_color: '#0f172a',
+      card_color: '#1e293b',
+      text_color: '#f1f5f9',
+      primary_color: '#4f46e5',
+      secondary_color: '#94a3b8',
+      font_family: 'DM Sans',
+      font_size: 16
+    };
+
+    let config = { ...defaultConfig };
+    // Inject jobs from server and map to UI format
+    let serverJobs = <%- JSON.stringify(jobs) %>;
+    let jobs = serverJobs.map(job => ({
+      __backendId: job._id,
+      title: job.jobtitle,
+      department: job.department,
+      location: job.location,
+      salary_range: job.salary,
+      description: job.description,
+      requirements: job.requirement,
+      status: 'Active',
+      type: 'Full-time'
+    }));
+    let editingJob = null;
+    let deletingJob = null;
+
+    // DOM Elements
+    const modal = document.getElementById('job-modal');
+    const deleteModal = document.getElementById('delete-modal');
+    const limitModal = document.getElementById('limit-modal');
+    const form = document.getElementById('job-form');
+    const jobsContainer = document.getElementById('jobs-container');
+    const emptyState = document.getElementById('empty-state');
+
+    // Data Handler
+    const dataHandler = {
+      onDataChanged(data) {
+        jobs = data;
+        renderJobs();
+        updateStats();
+      }
+    };
+
+    // Initialize SDKs
+    async function init() {
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (newConfig) => {
+            config = { ...defaultConfig, ...newConfig };
+            applyConfig();
+          },
+          mapToCapabilities: (cfg) => ({
+            recolorables: [
+              {
+                get: () => cfg.background_color || defaultConfig.background_color,
+                set: (v) => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); }
+              },
+              {
+                get: () => cfg.card_color || defaultConfig.card_color,
+                set: (v) => { cfg.card_color = v; window.elementSdk.setConfig({ card_color: v }); }
+              },
+              {
+                get: () => cfg.text_color || defaultConfig.text_color,
+                set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+              },
+              {
+                get: () => cfg.primary_color || defaultConfig.primary_color,
+                set: (v) => { cfg.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); }
+              },
+              {
+                get: () => cfg.secondary_color || defaultConfig.secondary_color,
+                set: (v) => { cfg.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }
+              }
+            ],
+            borderables: [],
+            fontEditable: {
+              get: () => cfg.font_family || defaultConfig.font_family,
+              set: (v) => { cfg.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+            },
+            fontSizeable: {
+              get: () => cfg.font_size || defaultConfig.font_size,
+              set: (v) => { cfg.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+            }
+          }),
+          mapToEditPanelValues: (cfg) => new Map([
+            ['dashboard_title', cfg.dashboard_title || defaultConfig.dashboard_title],
+            ['welcome_message', cfg.welcome_message || defaultConfig.welcome_message]
+          ])
+        });
+      }
+
+      // if (window.dataSdk) {
+      //   const result = await window.dataSdk.init(dataHandler);
+      //   if (!result.isOk) {
+      //     console.error('Failed to initialize data SDK');
+      //   }
+      // }
+
+      applyConfig();
+      setupEventListeners();
+      renderJobs();
+      updateStats();
+    }
+
+    function applyConfig() {
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+      const bgColor = config.background_color || defaultConfig.background_color;
+      const cardColor = config.card_color || defaultConfig.card_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+
+      document.body.style.fontFamily = `${fontFamily}, sans-serif`;
+      document.body.style.fontSize = `${fontSize}px`;
+      document.body.style.backgroundColor = bgColor;
+      document.body.style.color = textColor;
+
+      document.getElementById('dashboard-title').textContent = config.dashboard_title || defaultConfig.dashboard_title;
+      document.getElementById('dashboard-title').style.color = textColor;
+      document.getElementById('welcome-message').textContent = config.welcome_message || defaultConfig.welcome_message;
+      document.getElementById('welcome-message').style.color = secondaryColor;
+
+      const addBtn = document.getElementById('add-job-btn');
+      addBtn.style.backgroundColor = primaryColor;
+
+      document.querySelectorAll('.stat-card').forEach(card => {
+        card.style.backgroundColor = cardColor;
+      });
+
+      document.querySelector('section.bg-slate-900').style.backgroundColor = cardColor;
+      document.querySelector('#job-modal .bg-slate-900').style.backgroundColor = cardColor;
+      document.querySelector('#delete-modal .bg-slate-900').style.backgroundColor = cardColor;
+      document.querySelector('#limit-modal .bg-slate-900').style.backgroundColor = cardColor;
+    }
+
+    function setupEventListeners() {
+      document.getElementById('add-job-btn').addEventListener('click', openAddModal);
+      document.getElementById('close-modal').addEventListener('click', closeModal);
+      document.getElementById('cancel-btn').addEventListener('click', closeModal);
+      document.getElementById('cancel-delete').addEventListener('click', closeDeleteModal);
+      document.getElementById('confirm-delete').addEventListener('click', confirmDelete);
+      document.getElementById('close-limit').addEventListener('click', () => limitModal.style.display = 'none');
+      // form.addEventListener('submit', handleSubmit);
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+      deleteModal.addEventListener('click', (e) => {
+        if (e.target === deleteModal) closeDeleteModal();
+      });
+    }
+
+    function openAddModal() {
+      if (jobs.length >= 999) {
+        limitModal.style.display = 'flex';
+        return;
+      }
+      editingJob = null;
+      document.getElementById('modal-title').textContent = 'Add New Job';
+      form.reset();
+      document.getElementById('job-id').value = '';
+      modal.style.display = 'flex';
+    }
+
+    function openEditModal(job) {
+      editingJob = job;
+      document.getElementById('modal-title').textContent = 'Edit Job';
+      document.getElementById('job-id').value = job.__backendId;
+      document.getElementById('job-title').value = job.title || '';
+      document.getElementById('job-department').value = job.department || '';
+      document.getElementById('job-location').value = job.location || '';
+      document.getElementById('job-type').value = job.type || '';
+      document.getElementById('job-salary').value = job.salary_range || '';
+      document.getElementById('job-description').value = job.description || '';
+      document.getElementById('job-requirements').value = job.requirements || '';
+      document.getElementById('job-status').value = job.status || 'Draft';
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      modal.style.display = 'none';
+      editingJob = null;
+    }
+
+    function openDeleteModal(job) {
+      deletingJob = job;
+      deleteModal.style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+      deleteModal.style.display = 'none';
+      deletingJob = null;
+    }
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saving...';
+
+      const jobData = {
+        title: document.getElementById('job-title').value.trim(),
+        department: document.getElementById('job-department').value.trim(),
+        location: document.getElementById('job-location').value.trim(),
+        type: document.getElementById('job-type').value,
+        salary_range: document.getElementById('job-salary').value.trim(),
+        description: document.getElementById('job-description').value.trim(),
+        requirements: document.getElementById('job-requirements').value.trim(),
+        status: document.getElementById('job-status').value,
+        created_at: editingJob ? editingJob.created_at : new Date().toISOString()
+      };
+
+      let result;
+      if (editingJob) {
+        result = await window.dataSdk.update({ ...editingJob, ...jobData });
+      } else {
+        result = await window.dataSdk.create(jobData);
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Save Job';
+
+      if (result.isOk) {
+        closeModal();
+      } else {
+        showToast('Failed to save job. Please try again.', 'error');
+      }
+    }
+
+    async function confirmDelete() {
+      if (!deletingJob) return;
+      
+      const btn = document.getElementById('confirm-delete');
+      btn.disabled = true;
+      btn.textContent = 'Deleting...';
+
+      const result = await window.dataSdk.delete(deletingJob);
+      
+      btn.disabled = false;
+      btn.textContent = 'Delete';
+
+      if (result.isOk) {
+        closeDeleteModal();
+      } else {
+        showToast('Failed to delete job. Please try again.', 'error');
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `fixed bottom-4 right-4 px-5 py-3 rounded-xl text-white font-medium shadow-lg fade-in z-50 ${type === 'error' ? 'bg-red-600' : 'bg-slate-700'}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    function updateStats() {
+      document.getElementById('total-jobs').textContent = jobs.length;
+      document.getElementById('active-jobs').textContent = jobs.filter(j => j.status === 'Active').length;
+      document.getElementById('draft-jobs').textContent = jobs.filter(j => j.status === 'Draft').length;
+      document.getElementById('closed-jobs').textContent = jobs.filter(j => j.status === 'Closed').length;
+    }
+
+    function renderJobs() {
+      const existingRows = new Map();
+      jobsContainer.querySelectorAll('.job-row').forEach(row => {
+        existingRows.set(row.dataset.id, row);
+      });
+
+      if (jobs.length === 0) {
+        emptyState.style.display = 'block';
+        existingRows.forEach(row => row.remove());
+        return;
+      }
+
+      emptyState.style.display = 'none';
+
+      jobs.forEach(job => {
+        if (existingRows.has(job.__backendId)) {
+          updateJobRow(existingRows.get(job.__backendId), job);
+          existingRows.delete(job.__backendId);
+        } else {
+          jobsContainer.appendChild(createJobRow(job));
+        }
+      });
+
+      existingRows.forEach(row => row.remove());
+    }
+
+    function createJobRow(job) {
+      const row = document.createElement('div');
+      row.className = 'job-row p-5 flex items-center justify-between gap-4 transition-colors cursor-pointer';
+      row.dataset.id = job.__backendId;
+      row.innerHTML = getJobRowHTML(job);
+      
+      row.querySelector('.edit-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        openEditModal(job);
+      });
+      row.querySelector('.delete-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        openDeleteModal(job);
+      });
+      row.addEventListener('click', () => openEditModal(job));
+
+      return row;
+    }
+
+    function updateJobRow(row, job) {
+      const titleEl = row.querySelector('.job-title');
+      const deptEl = row.querySelector('.job-dept');
+      const locationEl = row.querySelector('.job-location');
+      const typeEl = row.querySelector('.job-type');
+      const statusEl = row.querySelector('.job-status');
+
+      if (titleEl) titleEl.textContent = job.title;
+      if (deptEl) deptEl.textContent = job.department;
+      if (locationEl) locationEl.textContent = job.location;
+      if (typeEl) typeEl.textContent = job.type;
+      if (statusEl) {
+        statusEl.textContent = job.status;
+        statusEl.className = `job-status px-3 py-1 rounded-full text-xs font-medium ${getStatusClasses(job.status)}`;
+      }
+
+      const editBtn = row.querySelector('.edit-btn');
+      const deleteBtn = row.querySelector('.delete-btn');
+      
+      editBtn.replaceWith(editBtn.cloneNode(true));
+      deleteBtn.replaceWith(deleteBtn.cloneNode(true));
+      
+      row.querySelector('.edit-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        openEditModal(job);
+      });
+      row.querySelector('.delete-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        openDeleteModal(job);
+      });
+    }
+
+    function getJobRowHTML(job) {
+      return `
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-3 mb-1">
+            <h3 class="job-title font-semibold text-white truncate">${escapeHtml(job.title)}</h3>
+            <span class="job-status px-3 py-1 rounded-full text-xs font-medium ${getStatusClasses(job.status)}">${job.status}</span>
+          </div>
+          <div class="flex items-center gap-4 text-sm text-slate-400">
+            <span class="job-dept flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+              </svg>
+              ${escapeHtml(job.department)}
+            </span>
+            <span class="job-location flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              ${escapeHtml(job.location)}
+            </span>
+            <span class="job-type flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              ${escapeHtml(job.type)}
+            </span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="edit-btn w-9 h-9 rounded-xl hover:bg-slate-800 flex items-center justify-center transition-colors" title="Edit">
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+          </button>
+          <button class="delete-btn w-9 h-9 rounded-xl hover:bg-red-900/20 flex items-center justify-center transition-colors" title="Delete">
+            <svg class="w-4 h-4 text-slate-400 hover:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
+        </div>
+      `;
+    }
+
+    function getStatusClasses(status) {
+      switch (status) {
+        case 'Active': return 'bg-emerald-900/40 text-emerald-300';
+        case 'Draft': return 'bg-amber-900/40 text-amber-300';
+        case 'Closed': return 'bg-slate-800 text-slate-300';
+        default: return 'bg-slate-800 text-slate-300';
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c929e334604481a',t:'MTc3MDI5NjcxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

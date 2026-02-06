@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Candidate Interface — AI Screening Bot</title>
+  <link rel="stylesheet" href="/stylesheet/user-dashboard.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🎧</div>
+      <div>
+        <div class="title">Onstro TalentAI</div>
+        <div class="subtitle">AI-Powered Screening & Voice Interview</div>
+      </div>
+    </div>
+    <nav>
+      <a class="back" href="/logout">logout</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="panel resume-panel">
+      <h2>Resume</h2>
+      <label>Candidate Name
+        <input id="candName" placeholder="Your full name">
+      </label>
+ 
+      <label>Paste Resume / OR Upload File (parsing not required)
+        <textarea id="resumeText" rows="8" placeholder="Paste your resume or key experiences..."></textarea>
+        <input id="fileUpload" type="file" accept=".txt,.pdf,.doc,.docx">
+        <div class="small">File upload is for demo UI only; parsing is not performed. You can paste content above.</div>
+      </label>
+
+      <label>current ctc(optional)
+        <input id="apiKey" placeholder="current ctc">
+      </label>
+
+      <div class="actions">
+        <button id="analyzeBtn" class="primary">Analyze vs Job Description</button>
+        <button id="clearBtn" class="muted">Clear</button>
+      </div>
+
+      <div class="card preview" id="jdPreview">
+        <h3>Job Description</h3>
+        <div id="jdContent">
+          <% if (typeof job !== 'undefined' && job && job.length > 0) { %>
+            <% const latest = job[job.length - 1]; %>
+            <div class="jd-entry">
+              <h4><%= latest.jobtitle %></h4>
+              <p><strong>Location:</strong> <%= latest.location %></p>
+              <% if (latest.salary) { %><p><strong>Salary:</strong> <%= latest.salary %></p><% } %>
+              <p><strong>Description:</strong></p>
+              <p><%= latest.description %></p>
+              <% if (latest.requirement) { %>
+                <p><strong>Requirements:</strong></p>
+                <p><%= latest.requirement %></p>
+              <% } %>
+            </div>
+          <% } else { %>
+            <div class="small">No job description available yet.</div>
+          <% } %>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel interview-panel">
+      <h2>AI Interview Agent</h2>
+      <div id="statusMsg" class="card small">Awaiting resume analysis...</div>
+
+      <div id="interviewArea" class="card" hidden>
+        <div id="questionCard">
+          <div id="qIndex" class="small"></div>
+          <div id="questionText" class="question"></div>
+        </div>
+
+        <div id="answerArea">
+          <textarea id="answerText" rows="4" placeholder="Type your answer here..."></textarea>
+          <div class="controls">
+            <button id="micBtn">🎙️ Start Mic</button>
+            <button id="speakBtn">🔊 Speak Q</button>
+            <button id="nextBtn" class="primary">Next</button>
+          </div>
+          <div class="small" id="sttInfo">Speech recognition: Not started</div>
+        </div>
+      </div>
+
+      <div id="resultArea" class="card" hidden>
+        <h3>Interview Result</h3>
+        <div id="resultSummary" class="small"></div>
+        <div style="margin-top:.6rem">
+          <button id="saveResult" class="primary">Save Result (to Admin)</button>
+          <button id="restart" class="muted">Restart Interview</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Default job description to ensure interview can proceed even if DB is empty
+    window.serverJob = {
+      title: "General Interview",
+      skills: "Communication, General Aptitude",
+      experience: "Open",
+      description: "This is a default interview setting. Please proceed with your resume analysis."
+    };
+
+    <% if (typeof job !== 'undefined' && job && job.length > 0) { 
+         const latest = job[job.length - 1]; %>
+         window.serverJob.title = <%- JSON.stringify(latest.jobtitle || '') %>;
+         window.serverJob.skills = <%- JSON.stringify(latest.requirement || '') %>;
+         window.serverJob.experience = <%- JSON.stringify(latest.location || '') %>;
+         window.serverJob.description = <%- JSON.stringify(latest.description || '') %>;
+    <% } %>
+  </script>
+  <script src="/javascript/user-dashboard.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</body>
+</html>

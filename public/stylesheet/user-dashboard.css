@@ -1,0 +1,49 @@
+/* Candidate interface styles */
+:root{
+  --bg:#071026;
+  --panel: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  --accent1:#6c63ff;
+  --accent2:#3b82f6;
+  --muted:#9fb1d4;
+  --card: rgba(255,255,255,0.03);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+  min-height:100vh;
+  background:linear-gradient(180deg,#051028,#07142a 60%);
+  color:#e8f2ff;
+  padding:1.25rem;
+}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.brand{display:flex;gap:.8rem;align-items:center}
+.logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent2),var(--accent1));display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.title{font-weight:700}
+.subtitle{font-size:.85rem;color:var(--muted)}
+.back{color:var(--muted);text-decoration:none;padding:.4rem .6rem;border-radius:8px}
+
+.wrap{display:grid;grid-template-columns:1fr 480px;gap:1rem;align-items:start}
+.panel{background:var(--panel); padding:1rem;border-radius:12px; box-shadow:0 8px 30px rgba(2,6,18,0.6)}
+.resume-panel label{display:block;margin-bottom:.7rem}
+.resume-panel input,.resume-panel textarea{width:100%;padding:.6rem;border-radius:8px;border:0;background:var(--card);color:inherit;margin-top:.25rem}
+.actions{display:flex;gap:.5rem;margin-top:.6rem}
+button{cursor:pointer}
+button.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:0;color:white;padding:.6rem .85rem;border-radius:10px;font-weight:700}
+button.muted{background:transparent;border:1px solid rgba(255,255,255,0.03);padding:.5rem .7rem;border-radius:8px;color:var(--muted)}
+
+.preview{margin-top:1rem;padding:.9rem}
+.preview h3{margin:0 0 .5rem 0}
+#jdContent{color:var(--muted)}
+
+.interview-panel h2{margin-top:0}
+.card{background:var(--card);padding:.9rem;border-radius:10px;box-shadow:0 6px 18px rgba(7,10,20,0.6)}
+.question{font-weight:700;font-size:1.05rem;margin:0 0 .5rem 0}
+#answerText{width:100%;padding:.6rem;border-radius:8px;background:rgba(255,255,255,0.02);border:0;color:inherit}
+.controls{display:flex;gap:.5rem;margin-top:.6rem;align-items:center}
+.small{font-size:.9rem;color:var(--muted)}
+
+#resultSummary{color:var(--muted)}
+@media (max-width:1080px){
+  .wrap{grid-template-columns:1fr}
+}
