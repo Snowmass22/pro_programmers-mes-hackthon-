@@ -10,8 +10,7 @@ body {
     background: #0f172a; /* Dark sleek background */
     color: white;
     overflow-x: hidden;
-    margin-right: 10rem;   
-    margin-left: 10rem;
+    
 }
 
 /* Navbar */
@@ -35,7 +34,6 @@ body {
     color: #cbd5e1;
     text-decoration: none;
     margin-right: 20px;
-    font-size: 18px;
     font-weight: bold;
 }
 
@@ -138,4 +136,80 @@ footer {
     text-align: center;
     padding: 40px;
     color: #475569;
+}
+
+
+/* ... Keep your existing base styles ... */
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 20px 30px;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .nav-links {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .nav-links a {
+        margin-right: 10px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Responsive Hero Section */
+@media (max-width: 992px) {
+    .hero {
+        flex-direction: column-reverse; /* Stack content, image/animation on top */
+        text-align: center;
+        padding: 40px 20px;
+        justify-content: center;
+    }
+
+    .hero-content {
+        max-width: 100%;
+        margin-top: 40px;
+    }
+
+    h1 {
+        font-size: 2.5rem; /* Shrink title for mobile */
+    }
+
+    .voice-wave {
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+}
+
+/* Responsive Buttons */
+@media (max-width: 480px) {
+    .btn-primary-large, .btn-secondary-large {
+        width: 100%; /* Full width buttons on small phones */
+        margin: 10px 0;
+        display: block;
+    }
+}
+
+/* Responsive Features Grid */
+@media (max-width: 992px) {
+    .features {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+        padding: 40px;
+    }
+}
+
+@media (max-width: 600px) {
+    .features {
+        grid-template-columns: 1fr; /* 1 column for phones */
+        padding: 20px;
+    }
+    
+    .feature-card {
+        padding: 20px;
+    }
 }
