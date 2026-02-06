@@ -256,6 +256,7 @@ app.post('/save-score',isloggedin,async(req,res)=>{
     res.status(200).send("Score saved successfully");
 })
 
-app.listen(8080,(req,res)=>{
-    console.log("server is listening on port 8080");
+const PORT = process.env.PORT || 8080;
+app.listen(PORT,()=>{
+    console.log(`server is listening on port ${PORT}`);
 })
